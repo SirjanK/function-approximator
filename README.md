@@ -1,2 +1,2 @@
 # function-approximator
-playground for trying out function approximation ideas
+Playground for trying out function approximation ideas
