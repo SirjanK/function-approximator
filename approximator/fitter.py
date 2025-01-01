@@ -14,7 +14,7 @@ class Fitter(ABC):
         self._input_sampler = input_sampler
         
     @abstractmethod
-    def fit() -> Callable:
+    def fit(self) -> Callable:
         """
         Fit the function
 
