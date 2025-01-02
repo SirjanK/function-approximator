@@ -40,6 +40,7 @@ class ModelBasedFitter(Fitter, ABC):
         self._optimizer = self.get_optimizer()
 
         super().__init__(fn, input_sampler)
+        self.init_other_state_variables()
     
     @abstractmethod
     def get_loss_fn(self) -> Callable:
@@ -108,6 +109,13 @@ class ModelBasedFitter(Fitter, ABC):
 
         # subclasses can override this for custom metrics
         return {}
+    
+    def init_other_state_variables(self) -> None:
+        """
+        Helper for subclasses to initialize any other state variables that can be used during computation
+        """
+
+        pass
 
     @overrides
     def fit(self) -> Callable:
