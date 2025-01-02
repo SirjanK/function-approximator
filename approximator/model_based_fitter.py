@@ -124,7 +124,7 @@ class ModelBasedFitter(Fitter, ABC):
                 self._evaluate_and_log(step_idx)
 
         def fitted_fn(*args) -> Any:
-            model_out = self._model(self.convert_input_to_tensor(args)).item()
+            model_out = self._model(self.convert_input_to_tensor(args))
             return self.convert_model_output_to_function_output(model_out)
         
         return fitted_fn
@@ -137,7 +137,7 @@ class ModelBasedFitter(Fitter, ABC):
         :return: the output tensor for the forward pass
         """
 
-        inputs = torch.tensor([self.convert_input_to_tensor(*inp) for inp in batch])
+        inputs = torch.stack([self.convert_input_to_tensor(*inp) for inp in batch])
         return self._model(inputs)
     
     def _step(self) -> None:
@@ -156,7 +156,7 @@ class ModelBasedFitter(Fitter, ABC):
 
         # compute loss tensor
         targets = self.convert_output_to_tensor(targets)
-        loss = self._loss(model_outputs, targets)
+        loss = self._loss_fn(model_outputs, targets)
 
         # backward pass
         loss.backward()
@@ -179,7 +179,7 @@ class ModelBasedFitter(Fitter, ABC):
 
         # compute loss tensor
         targets = self.convert_output_to_tensor(targets)
-        loss = self._loss(model_outputs, targets)
+        loss = self._loss_fn(model_outputs, targets)
 
         # compute other metrics
         metrics = self.compute_metrics(model_outputs, targets)
